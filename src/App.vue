@@ -5,8 +5,8 @@ import {RouterView, RouterLink} from 'vue-router'
 <template>
   <main>
     <div class="links">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink active-class="active" to="/">Home</RouterLink>
+      <RouterLink active-class="active" to="/about">About</RouterLink>
     </div>
     <RouterView />
   </main>
@@ -20,10 +20,14 @@ import {RouterView, RouterLink} from 'vue-router'
 .links a{
   margin: 10px;
   text-decoration: none;
-  color: black;
 }
 
 .links a:hover{
+  color: green;
+}
+
+.active{
+  font-weight: bolder;
   color: green;
 }
 </style>

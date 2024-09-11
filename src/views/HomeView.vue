@@ -1,17 +1,51 @@
 <script setup>
 import carsData from '../assets/data.json'
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 const cars = ref(carsData)
+const make = ref("")
+
+onMounted(() => {
+  console.log(route.query)
+  make.value = route.query.make || ""
+})
+
+watch(make, () => {
+  if(make.value){
+    if(make.value === "All"){
+      cars.value = carsData
+    }else {
+      cars.value = carsData.filter(c => c.make === make.value)
+    }
+  }
+})
+
+const handleChange = () => {
+  router.push({query: {make: make.value}})
+}
+
+
 </script>
 
 <template>
   <main class="container">
     
     <h1>Cars</h1>
+    <select @change="handleChange" v-model="make">
+      <option value="All">All</option>
+      <option value="Chevrolet">Chevrolet</option>
+      <option value="Buick">Buick</option>
+      <option value="Porsche">Porsche</option>
+      <option value="Audi">Audi</option>
+    </select>
     <div class="cards">
-      <div class="card" v-for="car in cars" :key="car.id">
+      <div class="card" v-for="car in cars" :key="car.id" @click="router.push(`/car/${car.id}`)">
         <h1>{{ car.make }}</h1>
+        <h1>{{ car.body }}</h1>
         <p>${{  car.price }}</p>
       </div>
     </div>
@@ -36,6 +70,8 @@ const cars = ref(carsData)
   border-radius: 6px;
   cursor: pointer;
   box-shadow: 0px 8px 10px grey;
+  text-decoration: none;
+  text-align: center;
 }
 
 .card:hover{
